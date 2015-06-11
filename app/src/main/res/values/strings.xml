@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Neutralisator</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="actionbar_label">\u0020\u0020Hexen-Neutralisator</string>
+
+    <string name="progress_message">Hexenneutralisierung\nin Arbeit...</string>
+    <string name="done_message">Hexenschwingungen\nerfolgreich neutralisiert!</string>
+    <string name="button_done">OK</string>
+
+    <!-- progress messages -->
+    <string name="message_01">( ruhig weiteratmen! )</string>
+    <string name="message_02">( wird gleich besser! )</string>
+    <string name="message_03">( gaaaaaaanz ruhig bleiben! )</string>
+    <string name="message_04">( alles unter Kontrolle! )</string>
+    <string name="message_05">( denk an einen Fisch! )</string>
+    <string name="message_06">( dauert etwas... )</string>
+    <string name="message_07">( gleich hammas...! )</string>
+    <string name="message_08">( einmal tief ein und ausatmen! )</string>
+    <string name="message_09">( denk an Schokolade! )</string>
+    <string name="message_10">( gleich gehts wieder! )</string>
+</resources>
