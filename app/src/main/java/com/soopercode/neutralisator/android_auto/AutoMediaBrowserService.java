@@ -2,6 +2,8 @@ package com.soopercode.neutralisator.android_auto;
 
 import android.graphics.BitmapFactory;
 import android.media.MediaDescription;
+import android.media.MediaMetadata;
+import android.media.MediaPlayer;
 import android.media.browse.MediaBrowser;
 import android.media.session.MediaSession;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import com.soopercode.neutralisator.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by ria on 6/11/15.
@@ -35,7 +38,7 @@ public class AutoMediaBrowserService extends MediaBrowserService {
 
         mediaSession = new MediaSession(this, "Auto Neutralizer");
         mediaSession.setActive(true);
-        //mediaSession.setCallback(/* ... */);
+        mediaSession.setCallback(new MediaSessionCallback());
         setSessionToken(mediaSession.getSessionToken());
     }
 
@@ -96,5 +99,65 @@ public class AutoMediaBrowserService extends MediaBrowserService {
     }
 
 
+    /* **************** CALLBACK *************** */
+    private class MediaSessionCallback extends MediaSession.Callback{
+
+        private MediaPlayer mediaPlayer;
+
+        /**
+         * called when MediaItem with the FLAG_PLAYABLE property is clicked
+         */
+        @Override
+        public void onPlayFromMediaId(String mediaId, Bundle extras) {
+
+            // set same text
+            MediaMetadata.Builder builder = new MediaMetadata.Builder();
+            builder.putText(MediaMetadata.METADATA_KEY_TITLE, getString(R.string.progress_message));
+            builder.putText(MediaMetadata.METADATA_KEY_ARTIST, chooseText());
+            builder.putBitmap(MediaMetadata.METADATA_KEY_ART,
+                    BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+            mediaSession.setMetadata(builder.build());
+
+            // find out which song to play
+            int songResId = 0;
+            for(OttoContent.Song song : songs){
+                if(song.getTitle().equals(mediaId)){
+                    songResId = song.getResId();
+                }
+            }
+            mediaPlayer = MediaPlayer.create(AutoMediaBrowserService.this, songResId);
+            mediaPlayer.start();
+        }
+
+        @Override
+        public void onPlay() {
+            super.onPlay();
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+        }
+
+
+        private String chooseText(){
+            String text = "";
+            Random randy = new Random();
+
+            switch (randy.nextInt(9)){
+                case 0: text = getString(R.string.message_01); break;
+                case 1: text = getString(R.string.message_02); break;
+                case 2: text = getString(R.string.message_03); break;
+                case 3: text = getString(R.string.message_04); break;
+                case 4: text = getString(R.string.message_05); break;
+                case 5: text = getString(R.string.message_06); break;
+                case 6: text = getString(R.string.message_07); break;
+                case 7: text = getString(R.string.message_08); break;
+                case 8: text = getString(R.string.message_09); break;
+                case 9: text = getString(R.string.message_10); break;
+            }
+            return text;
+        }
+    }
 
 }
