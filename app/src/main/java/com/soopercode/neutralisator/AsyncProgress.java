@@ -2,7 +2,6 @@ package com.soopercode.neutralisator;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
@@ -24,7 +23,6 @@ public class AsyncProgress extends AsyncTask<Integer, Void, Void> {
     private static final String TAG = AsyncProgress.class.getSimpleName();
 
     private ProgressBar progressBar;
-//    private int pStatus = 0;
     private Context context;
 
     private Button neutralize;
@@ -72,24 +70,7 @@ public class AsyncProgress extends AsyncTask<Integer, Void, Void> {
     }
 
     private Dialog createNeutralizeDialog(){
-/*        progressBar = new ProgressDialog(context);
 
-        progressBar.setMessage(context.getString(R.string.progress_message));
-        progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-//        ImageView img = new ImageView(context);
-//        img.setImageDrawable(context.getResources().getDrawable(R.mipmap.ic_launcher));
-//        progressBar.setView(img);
-        progressBar.setCancelable(false);
-        progressBar.setMax(100);
-        progressBar.setProgressNumberFormat(null);
-        progressBar.setProgressPercentFormat(null);
-
-        Drawable customDrawable = context.getResources().getDrawable(R.drawable.custom_progressbar);
-        progressBar.setProgressDrawable(customDrawable);
-*/
-
-
-//        Dialog progressDialog = new Dialog(context, R.style.DialogStyle);
         Dialog dialog = new Dialog(context, R.style.NewDialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_neutralize);
@@ -100,7 +81,6 @@ public class AsyncProgress extends AsyncTask<Integer, Void, Void> {
         text2.setText(chooseText());
 
         progressBar = (ProgressBar)dialog.findViewById(R.id.progressbar);
-//        progressBar.setProgressDrawable(context.getResources().getDrawable(R.drawable.custom_progressbar));
 
         try {
             gif = new

@@ -17,8 +17,18 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".android_auto.AutoMediaBrowserService"
+                 android:exported="true">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService"/>
+            </intent-filter>
+        </service>
+
         <meta-data android:name="com.google.android.gms.car.application"
                    android:resource="@xml/automotive_app_desc"/>
+        <meta-data android:name="com.google.android.gms.car.notification.SmallIcon"
+                   android:resource="@mipmap/ic_launcher" /> <!-- TODO: different icon? -->
+
     </application>
 
 </manifest>

@@ -10,7 +10,7 @@
     <Button
         android:layout_width="200dp"
         android:layout_height="60dp"
-        android:text="Neutralisieren!"
+        android:text="@string/button_neutralize"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@drawable/button_textcolor"

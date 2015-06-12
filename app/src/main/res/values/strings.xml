@@ -4,6 +4,7 @@
     <string name="action_settings">Settings</string>
     <string name="actionbar_label">\u0020\u0020Hexen-Neutralisator</string>
 
+    <string name="button_neutralize">Neutralisieren!</string>
     <string name="progress_message">Hexenneutralisierung\nin Arbeit...</string>
     <string name="done_message">Hexenschwingungen\nerfolgreich neutralisiert!</string>
     <string name="button_done">OK</string>
