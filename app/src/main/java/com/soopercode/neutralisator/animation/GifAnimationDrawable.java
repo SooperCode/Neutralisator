@@ -1,4 +1,4 @@
-package com.soopercode.neutralisator;
+package com.soopercode.neutralisator.animation;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;

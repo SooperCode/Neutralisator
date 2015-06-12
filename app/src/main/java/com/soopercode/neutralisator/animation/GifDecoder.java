@@ -1,4 +1,4 @@
-package com.soopercode.neutralisator;
+package com.soopercode.neutralisator.animation;
 
 /* https://www.dropbox.com/s/o6gxqfhem49khf5/GifDecoder.java?dl=0
  * Taken from http://code.google.com/p/animated-gifs-in-android/
@@ -12,7 +12,6 @@ import java.util.Vector;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
-import android.util.Log;
 
 
 public class GifDecoder {

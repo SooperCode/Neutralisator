@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.soopercode.neutralisator.animation.GifAnimationDrawable;
+
 import java.io.IOException;
 import java.util.Random;
 

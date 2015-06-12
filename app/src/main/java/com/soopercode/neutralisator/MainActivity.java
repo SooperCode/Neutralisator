@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.List;
 import java.util.Random;
 
 
@@ -17,20 +18,6 @@ public class MainActivity extends ActionBarActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private MediaPlayer player;
-
-    private static final int[] SONGS = {
-            R.raw.otto_hexen_3_10s,
-            R.raw.otto_hexenklo_10s,
-            R.raw.otto_hexman_10s,
-            R.raw.otto_hexen_4_15s,
-            R.raw.otto_imwagen_2_15s,
-            R.raw.otto_lebtnoch_1_20s,
-            R.raw.otto_lebtnoch_2_20s,
-            R.raw.otto_imwagen_1_20s,
-            R.raw.otto_hexen_1_20s,
-            R.raw.otto_hexen_2_20s,
-            R.raw.otto_mitsahne_25s
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +32,15 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    // on Neutralize Button click
     public void neutralize(View view) {
 
         //play random song
         Random random = new Random();
-        int chosenSong = random.nextInt(SONGS.length - 1);
-        Log.wtf(TAG, String.valueOf(chosenSong));
-        player = MediaPlayer.create(this, SONGS[chosenSong]);
+        List<OttoContent.Song> songs = OttoContent.getInstance().getSongs();
+        int songIndex = random.nextInt(songs.size() - 1);
+        Log.wtf(TAG, String.valueOf(songIndex));
+        player = MediaPlayer.create(this, songs.get(songIndex).getResId());
 
         int songDurationMillis = player.getDuration();
         new AsyncProgress(this).execute(songDurationMillis);
