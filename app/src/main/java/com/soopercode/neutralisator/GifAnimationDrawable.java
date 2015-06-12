@@ -3,6 +3,7 @@ package com.soopercode.neutralisator;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -17,12 +18,11 @@ import java.io.InputStream;
  */
 public class GifAnimationDrawable extends AnimationDrawable {
 
+    private static final String TAG = GifAnimationDrawable.class.getSimpleName();
+
     private boolean decoded;
-
     private GifDecoder mGifDecoder;
-
     private Bitmap mTmpBitmap;
-
     private int height, width;
 
     public GifAnimationDrawable(File f) throws IOException
@@ -49,7 +49,7 @@ public class GifAnimationDrawable extends AnimationDrawable {
         mGifDecoder = new GifDecoder();
         mGifDecoder.read(bis);
         mTmpBitmap = mGifDecoder.getFrame(0);
-        android.util.Log.v("GifAnimationDrawable", "===>Lead frame: ["+width+"x"+height+"; "+mGifDecoder.getDelay(0)+";"+mGifDecoder.getLoopCount()+"]");
+        Log.d("GifAnimationDrawable", "===>Lead frame: ["+width+"x"+height+"; "+mGifDecoder.getDelay(0)+";"+mGifDecoder.getLoopCount()+"]");
         height = mTmpBitmap.getHeight();
         width = mTmpBitmap.getWidth();
         addFrame(new BitmapDrawable(mTmpBitmap), mGifDecoder.getDelay(0));
@@ -68,12 +68,12 @@ public class GifAnimationDrawable extends AnimationDrawable {
         public void run()
         {
             mGifDecoder.complete();
-            int i, n = mGifDecoder.getFrameCount(), t;
-            for(i=1;i<n;i++){
+            int frameCount = mGifDecoder.getFrameCount();
+            for(int i=1; i<frameCount; i++){
                 mTmpBitmap = mGifDecoder.getFrame(i);
-                t = mGifDecoder.getDelay(i);
-                android.util.Log.v("GifAnimationDrawable", "===>Frame "+i+": "+t+"]");
-                addFrame(new BitmapDrawable(mTmpBitmap), t);
+                int delay = mGifDecoder.getDelay(i);
+                addFrame(new BitmapDrawable(mTmpBitmap), delay);
+                Log.d(TAG, "addFrame " + i + " | delay: " + delay);
             }
             decoded = true;
             mGifDecoder = null;
