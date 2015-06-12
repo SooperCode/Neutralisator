@@ -1,13 +1,16 @@
 package com.soopercode.neutralisator.android_auto;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.media.MediaDescription;
 import android.media.MediaMetadata;
 import android.media.MediaPlayer;
 import android.media.browse.MediaBrowser;
 import android.media.session.MediaSession;
+import android.media.session.PlaybackState;
 import android.os.Bundle;
 import android.service.media.MediaBrowserService;
+import android.util.Log;
 
 import com.soopercode.neutralisator.OttoContent;
 import com.soopercode.neutralisator.R;
@@ -28,8 +31,9 @@ public class AutoMediaBrowserService extends MediaBrowserService {
     private final String ROOT_ITEM_TEXT = "Neutralisieren!";
 
     private MediaSession mediaSession;
+    private MediaPlayer mediaPlayer;
     private List<OttoContent.Song> songs = OttoContent.getInstance().getSongs();
-
+    private boolean nextSong;
 
 
     @Override
@@ -98,11 +102,17 @@ public class AutoMediaBrowserService extends MediaBrowserService {
                 MediaBrowser.MediaItem.FLAG_PLAYABLE );
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mediaPlayer != null){
+            mediaPlayer.release();
+        }
+    }
 
     /* **************** CALLBACK *************** */
-    private class MediaSessionCallback extends MediaSession.Callback{
 
-        private MediaPlayer mediaPlayer;
+    private class MediaSessionCallback extends MediaSession.Callback{
 
         /**
          * called when MediaItem with the FLAG_PLAYABLE property is clicked
@@ -110,7 +120,9 @@ public class AutoMediaBrowserService extends MediaBrowserService {
         @Override
         public void onPlayFromMediaId(String mediaId, Bundle extras) {
 
-            // set same text
+            togglePlaybackState(true);
+
+            // set 'progress message' as in the apps's progress dialog
             MediaMetadata.Builder builder = new MediaMetadata.Builder();
             builder.putText(MediaMetadata.METADATA_KEY_TITLE, getString(R.string.progress_message));
             builder.putText(MediaMetadata.METADATA_KEY_ARTIST, chooseText());
@@ -126,19 +138,37 @@ public class AutoMediaBrowserService extends MediaBrowserService {
                 }
             }
             mediaPlayer = MediaPlayer.create(AutoMediaBrowserService.this, songResId);
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    togglePlaybackState(false);
+                    nextSong = true;
+                }
+            });
             mediaPlayer.start();
         }
 
         @Override
         public void onPlay() {
-            super.onPlay();
+            Log.wtf(TAG, "onPlay()");
+            togglePlaybackState(true);
+            if(nextSong){
+                int randomIndex = new Random().nextInt(songs.size()-1);
+                onPlayFromMediaId(songs.get(randomIndex).getTitle(), null);
+                nextSong = false;
+            }else{
+                mediaPlayer.start();
+            }
         }
 
         @Override
         public void onPause() {
-            super.onPause();
+            Log.wtf(TAG, "onPause()");
+            togglePlaybackState(false);
+            if(mediaPlayer != null){
+                mediaPlayer.pause();
+            }
         }
-
 
         private String chooseText(){
             String text = "";
@@ -158,6 +188,26 @@ public class AutoMediaBrowserService extends MediaBrowserService {
             }
             return text;
         }
+
+        private void togglePlaybackState(boolean isPlaying){
+            PlaybackState playbackState;
+            if(isPlaying){
+                playbackState = new PlaybackState.Builder()
+                        .setActions(PlaybackState.ACTION_PLAY_PAUSE |
+                                PlaybackState.ACTION_SKIP_TO_NEXT |     // not yet implemented.
+                                PlaybackState.ACTION_SKIP_TO_PREVIOUS)  // not yet implemented.
+                        .setState(PlaybackState.STATE_PLAYING, 0, 1)
+                        .build();
+            }else{
+                playbackState = new PlaybackState.Builder()
+                        .setActions(PlaybackState.ACTION_PLAY_PAUSE)
+                        .setState(PlaybackState.STATE_PAUSED, 0, 1)
+                        .build();
+            }
+
+            mediaSession.setPlaybackState(playbackState);
+        }
+
     }
 
 }
