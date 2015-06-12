@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -49,15 +50,16 @@ public class AsyncProgress extends AsyncTask<Integer, Void, Void> {
 
     @Override
     protected Void doInBackground(Integer... params) {
-        int songDuration = params[0];
-        long sleepTime = (songDuration- 850)/100;
-        int pStatus = 0;
+        int songDurationMillis = params[0] - 200; //make up for thread's delay
+        long start = SystemClock.uptimeMillis();
 
+        int pStatus = 0;
         while(pStatus < 100){
-            pStatus++;
+            double position = ((double)SystemClock.uptimeMillis()-start) / songDurationMillis*100;
+            pStatus = (int)position;
             progressBar.setProgress(pStatus);
             try{
-                Thread.sleep(sleepTime);
+                Thread.sleep(200);
             }catch(InterruptedException e){ Log.e(TAG, e.toString());}
         }
         return null;

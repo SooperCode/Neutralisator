@@ -49,13 +49,13 @@ public class MainActivity extends ActionBarActivity {
 
         //play random song
         Random random = new Random();
-        int chosenSong = random.nextInt(SONGS.length-1);
+        int chosenSong = random.nextInt(SONGS.length - 1);
         Log.wtf(TAG, String.valueOf(chosenSong));
         player = MediaPlayer.create(this, SONGS[chosenSong]);
 
-        int songDuration = player.getDuration();
+        int songDurationMillis = player.getDuration();
+        new AsyncProgress(this).execute(songDurationMillis);
         player.start();
-        new AsyncProgress(this).execute(songDuration);
 
     }
 
