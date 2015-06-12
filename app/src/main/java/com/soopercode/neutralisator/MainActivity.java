@@ -49,7 +49,7 @@ public class MainActivity extends ActionBarActivity {
 
         //play random song
         Random random = new Random();
-        int chosenSong = random.nextInt(10);
+        int chosenSong = random.nextInt(SONGS.length-1);
         Log.wtf(TAG, String.valueOf(chosenSong));
         player = MediaPlayer.create(this, SONGS[chosenSong]);
 
@@ -66,7 +66,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    /************** for later use ***************/
+    /************** menu stuff - for later use ***************/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
