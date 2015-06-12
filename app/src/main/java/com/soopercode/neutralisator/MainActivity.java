@@ -18,6 +18,7 @@ public class MainActivity extends ActionBarActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private MediaPlayer player;
+    private AsyncProgress async;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,8 @@ public class MainActivity extends ActionBarActivity {
         player = MediaPlayer.create(this, songs.get(songIndex).getResId());
 
         int songDurationMillis = player.getDuration();
-        new AsyncProgress(this).execute(songDurationMillis);
+        async = new AsyncProgress(this);
+        async.execute(songDurationMillis);
         player.start();
 
     }
@@ -51,7 +53,13 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(player !=null) player.release();
+        if(player != null){
+            player.release();
+        }
+        if(async != null){
+            async.cancel(true);
+        }
+
     }
 
 
