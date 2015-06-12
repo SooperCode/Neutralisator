@@ -61,6 +61,9 @@ public class AsyncProgress extends AsyncTask<Integer, Void, Void> {
             try{
                 Thread.sleep(200);
             }catch(InterruptedException e){ Log.e(TAG, e.toString());}
+            if(isCancelled()){
+                break;
+            }
         }
         return null;
     }
@@ -71,6 +74,12 @@ public class AsyncProgress extends AsyncTask<Integer, Void, Void> {
 
         doneDialog = createDoneDialog();
         doneDialog.show();
+    }
+
+    @Override
+    protected void onCancelled() {
+        progressDialog.dismiss();
+        neutralize.setVisibility(View.VISIBLE);
     }
 
     private Dialog createNeutralizeDialog(){
